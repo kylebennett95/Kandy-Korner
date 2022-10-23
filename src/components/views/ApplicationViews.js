@@ -1,5 +1,6 @@
 import { Outlet, Route, Routes } from "react-router-dom"
 import { DataList } from "../dataList/DataList"
+import { ProductList } from "../dataList/ProductList"
 
 export const ApplicationViews = () => {
 	return (
@@ -7,14 +8,15 @@ export const ApplicationViews = () => {
 		<Route path="/" element={
 			<>
 				<h1>Kandy Korner</h1>
-				<div>Locations</div>
 
 				<Outlet />
 			</>
 		}>
 
-			<Route path="locations" element={
-			<DataList /> } />
+			<Route path="locations" element={ <DataList /> } />
+
+			<Route path="products" element={ <ProductList /> } />
+
 		</Route>
 	</Routes>
 	)

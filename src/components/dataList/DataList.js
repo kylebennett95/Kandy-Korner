@@ -15,14 +15,14 @@ export const DataList = () => {
     )
 
     return <>
-        <h2>List of Tickets</h2>
+        <h2>List of Locations</h2>
 
         <article className="locations">
             {
                 locations.map(
                     (location) => {
-                        return <section className="locations">
-                            <header>{location.address}</header>
+                        return <section className="locations" key={`locations--${location.id}`}>
+                            <header>Store Address: {location.address}</header>
                             <footer>Square Footage: {location.sqFootage}</footer>
                         </section>
                     }
@@ -30,9 +30,4 @@ export const DataList = () => {
             }
         </article>
     </>
-
-
-
-
-
 }

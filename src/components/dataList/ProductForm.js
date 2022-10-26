@@ -1,34 +1,32 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
 export const ProductForm = () => {
-    /*
-        TODO: Add the correct default properties to the
-        initial state object
-    */
     const [product, setProduct] = useState({
         name: "",
         type: [],
         price: []
     })
-    /*
-        TODO: Use the useNavigation() hook so you can redirect
-        the user to the ticket list
-    */
+    const [productType, setProductType] = useState([])
     const navigate = useNavigate()
 
-    // const localKandyUser = localStorage.getItem("kandy_user")
-    // const kandyUserObject = JSON.parse(localKandyUser)
+    useEffect(
+        () => {
+            fetch(`http://localhost:8088/productTypes`)
+            .then(response => response.json())
+            .then((productsArray) => {
+              setProductType(productsArray)
+            })
+        },
+        []);
 
     const handleSaveButtonClick = (event) => {
         event.preventDefault()
 
-        // TODO: Create the object to be saved to the API
-
-        const productToSendToAPI = {
-            name: product.name,
-            productTypesId: parseInt(product.type),
-            pricePerUnit: parseInt(product.price)
+    const productToSendToAPI = {
+        name: product.name,
+        productTypesId: parseInt(product.type),
+        pricePerUnit: parseInt(product.price)
         }
      
 
@@ -67,16 +65,17 @@ export const ProductForm = () => {
                 </div>
             </fieldset>
             <fieldset>
-                <div className="form-group">
-                <label htmlFor="name">Type:</label>
-                <option value={product.type} onChange={
-                        (evt) => {
-                            const copy = {...product}
-                            copy.type = evt.target.checked
-                            setProduct(copy)
-                        }
-                    }>Hard Candy</option>
-                </div>
+                <label htmlFor="name">Candy Type:</label>
+                <input
+                type="number"
+                name="productTypesId"
+                value={product.type.id}
+                onChange={(evt) => {
+                    const copy = { ...product };
+                    copy.type = evt.target.value;
+                    setProduct(copy)
+                }}
+                />
             </fieldset>
             <fieldset>
                 <div className="form-group">
@@ -104,3 +103,44 @@ export const ProductForm = () => {
         </form>
     )
 }
+
+               // {/* <label htmlFor="type">Hard Candy:</label>
+            //    <input type="checkbox"
+            //    value={productType} onChange={
+            //            (evt) => {
+            //                const copy = {...productType}
+              //              copy.type = evt.target.checked
+              //              setProduct(copy)
+               //         }
+               //     }/> */}
+
+            //    {
+            //     <div className="form-group">
+            //     <div className="products" key={product.id}>
+            //         <select>{
+            //             productType.map((obj) => {
+            //                  return <option value="Type" {...obj.id}>{obj.name}</option>
+            //             })
+            //         }</select>
+            //     </div>
+            //     </div>}
+
+
+//This WORKS
+
+/*{ <div className="form-group">
+<label htmlFor="price">Price:</label>
+<input
+    required autoFocus
+    type="text"
+    className="form-control"
+    placeholder="Product price"
+    value={product.price}
+    onChange={
+        (evt) => {
+            const copy = {...product}
+            copy.price = evt.target.value
+            setProduct(copy)
+        }
+    } />
+</div> }*/

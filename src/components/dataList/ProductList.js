@@ -37,7 +37,7 @@ export const ProductList = () => {
             {
                 filteredProducts.map(
                     (product) => {
-                        return <section className="products" key={`products--${product.id}`}>
+                        return <section className="productTypes" key={`products--${product.id}`}>
                             <header>Name: {product.name}</header>
                             <footer>Price: ${product.pricePerUnit}</footer>
                             <div>{product.productTypes.name}</div>

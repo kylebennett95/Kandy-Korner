@@ -4,6 +4,7 @@ import { ProductList } from "../dataList/ProductList"
 import { ProductForm } from "../dataList/ProductForm"
 import { CandyContainer } from "../dataList/CandyContainer"
 import { EmployeeList } from "../dataList/EmployeeList"
+import { EmployeeForm } from "../dataList/EmployeeForm"
 
 export const ApplicationViews = () => {
 	return (

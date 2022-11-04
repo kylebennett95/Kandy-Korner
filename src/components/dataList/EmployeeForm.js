@@ -4,27 +4,48 @@ import { useNavigate } from "react-router-dom"
 export const EmployeeForm = () => {
     const [employee, setEmployee] = useState({
         name: "",
-        location: [],
+        locationId: 0,
         startDate: "",
         payRate: "",
         email: "",
-        isStaff: [true]
+        isStaff: true,
+        userId: 0
+    })
+    const [user, setUser] = useState({
+        name: "",
+        email: "",
+        isStaff: true
     })
     const navigate = useNavigate()
+    const [userId, setUserId] = useState([])
+
+    useEffect(
+        () => {
+            fetch(`http://localhost:8088/users?_sort=id&order=desc`)
+            .then(response => response.json())
+            .then((userId) => {
+                setUserId(userId)
+            })
+        },
+        []);
 
     const handleSaveButtonClick = (event) => {
         event.preventDefault()
-    
-    const employeeToSendToAPI = {
-        name: employee.name,
-        locationId: parseInt(employee.location),
-        startDate: employee.startDate,
-        payRate: parseInt(employee.payRate),
-        email: employee.user.email,
-        isStaff: employee.isStaff
-    }
 
-    return fetch(`http://localhost:8088/http://localhost:8088/employees?_expand=user`, {
+        const employeeToSendToAPI = {
+            locationId: parseInt(employee.locationId),
+            startDate: employee.startDate,
+            payRate: parseInt(employee.payRate),
+            userId: userId[0].id + 1
+        }
+    
+        const usersToSendToAPI = {
+            name: user.name,
+            email: user.email,
+            isStaff: user.isStaff
+        }
+
+    fetch(`http://localhost:8088/employees`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -34,6 +55,14 @@ export const EmployeeForm = () => {
         .then(response => response.json())
         .then(() => {
             navigate("/employees")
+        })
+
+        fetch(`http://localhost:8088/users`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(usersToSendToAPI)
         })
     }
     
@@ -48,12 +77,12 @@ export const EmployeeForm = () => {
                         type="text"
                         className="form-control"
                         placeholder="Employee's name"
-                        value={employee.name}
+                        value={user.name}
                         onChange={
                             (evt) => {
-                                const copy = {...employee}
+                                const copy = {...user}
                                 copy.name = evt.target.value
-                                setEmployee(copy)
+                                setUser(copy)
                             }
                         } />
                 </div>
@@ -63,10 +92,10 @@ export const EmployeeForm = () => {
                 <input
                 type="number"
                 name="productTypesId"
-                value={employee.location.id}
+                value={employee.locationId}
                 onChange={(evt) => {
                     const copy = { ...employee };
-                    copy.type = evt.target.value;
+                    copy.locationId = evt.target.value;
                     setEmployee(copy)
                 }}
                 />
@@ -107,18 +136,18 @@ export const EmployeeForm = () => {
             </fieldset>
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="email">Email:</label>
+                    <label htmlFor="name">Email:</label>
                     <input
                         required autoFocus
                         type="text"
                         className="form-control"
                         placeholder="Employee's email"
-                        value={employee.user.email}
+                        value={user.email}
                         onChange={
                             (evt) => {
-                                const copy = {...employee}
-                                copy.name = evt.target.value
-                                setEmployee(copy)
+                                const copy = {...user}
+                                copy.email = evt.target.value
+                                setUser(copy)
                             }
                         } />
                 </div>
